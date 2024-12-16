@@ -1,0 +1,54 @@
+-- Crear tabla de usuarios
+CREATE TABLE Users (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    Username TEXT NOT NULL UNIQUE,
+    PasswordHash TEXT NOT NULL,
+    Role TEXT NOT NULL
+);
+
+-- Crear tabla de bicicletas
+CREATE TABLE Bikes (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    Model TEXT NOT NULL,
+    Available BOOLEAN NOT NULL DEFAULT 1
+);
+
+-- Crear tabla de alquileres
+CREATE TABLE Rentals (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    UserId INTEGER NOT NULL,
+    BikeId INTEGER NOT NULL,
+    RentedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (UserId) REFERENCES Users(Id),
+    FOREIGN KEY (BikeId) REFERENCES Bikes(Id)
+);
+
+-- Crear tabla de tokens revocados
+CREATE TABLE RevokedTokens (
+    Token TEXT PRIMARY KEY,
+    RevokedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Insertar datos de ejemplo para usuarios
+INSERT INTO Users (Username, PasswordHash, Role)
+VALUES
+('john_doe', '1234', 'user'), -- Contraseña: 123456
+('admin_user', '1234', 'admin'); -- Contraseña: admin123
+
+-- Insertar datos de ejemplo para bicicletas
+INSERT INTO Bikes (Model, Available)
+VALUES
+('Mountain Bike', 1),
+('City Bike', 1),
+('Road Bike', 1),
+('Electric Bike', 1);
+
+-- Insertar datos de ejemplo para alquileres
+INSERT INTO Rentals (UserId, BikeId)
+VALUES
+(1, 1);
+
+-- Insertar datos de ejemplo para tokens revocados
+INSERT INTO RevokedTokens (Token, RevokedAt)
+VALUES
+('example_revoked_token', datetime('now'));
